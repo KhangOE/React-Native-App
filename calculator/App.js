@@ -1,6 +1,19 @@
+<<<<<<< HEAD
 import React, { useState, useEffect, useReducer } from "react";
 import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import AsyncStorage from '@react-native-community/async-storage';
+=======
+import React, { useState, useEffect } from "react";
+import {
+  Text,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+  SafeAreaView,
+  FlatList,
+} from "react-native";
+
+>>>>>>> cee4e25568fea699367409e1b1f96276a646e5b6
 const App = () => {
   const [text, setText] = useState("");
   const [prev, setPrev] = useState("");
@@ -12,10 +25,10 @@ const App = () => {
   const checkResult = () => {
     try {
       let res = eval(text);
-      if (res) {
+      if (res != undefined) {
         setResult(res);
         setPrev(text);
-        setText(res);
+        setText(res.toString());
       }
     } catch (error) {
       return;
@@ -38,7 +51,12 @@ const App = () => {
     setText((state) => state + action);
   };
 
+  const delOneCharacter = () => {
+    setText((pre) => pre.slice(0, -1));
+  };
+
   useEffect(() => {
+<<<<<<< HEAD
     if(text){
       setHistory((state) => [...state, { text: prev, result: result }]);
     }
@@ -61,16 +79,40 @@ const App = () => {
           setHistory(JSON.parse(result));
         });
  },[])
+=======
+    setHistory((state) => [{ text: prev, result: result }, ...state]);
+  }, [result]);
+
+  const renderItem = ({ item }) => {
+    return (
+      <View>
+        <Text style={{ textAlign: "right" }}>
+          {item.text ? item.text + "=" + item.result : " "}
+        </Text>
+      </View>
+    );
+  };
+>>>>>>> cee4e25568fea699367409e1b1f96276a646e5b6
 
   return (
     <View style={styles.container}>
-      <View style={{ borderWidth: 2, width: 200, height: 100 }}>
+      <SafeAreaView style={{ height: 100, width: 200 }}>
+        <FlatList
+          inverted
+          showsHorizontalScrollIndicator={false}
+          data={history}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => index}
+        />
+      </SafeAreaView>
+      <View style={{ borderWidth: 2, width: 200 }}>
         <Text
           style={{
             padding: 10,
-            fontSize: 20,
+            fontSize: 15,
             color: "white",
             textAlign: "right",
+            backgroundColor: "#a66",
           }}
         >
           {prev || " "}
@@ -78,12 +120,13 @@ const App = () => {
         <Text
           style={{
             padding: 10,
-            fontSize: 20,
+            fontSize: 25,
             color: "white",
             textAlign: "right",
+            backgroundColor: "#a66",
           }}
         >
-          {text}
+          {text || "0"}
         </Text>
       </View>
       <View>
@@ -91,8 +134,8 @@ const App = () => {
           <TouchableOpacity onPress={handleClearAll} style={styles.button}>
             <Text>AC</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
-            <Text>+/-</Text>
+          <TouchableOpacity style={styles.button} onPress={delOneCharacter}>
+            <Text>DEL</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button}>
             <Text>%</Text>
@@ -127,7 +170,7 @@ const App = () => {
             style={styles.button}
             onPress={() => selectAction("*")}
           >
-            <Text>X</Text>
+            <Text>*</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
@@ -208,13 +251,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  input: {
-    height: 40,
-    margin: 30,
-    borderWidth: 2,
-    color: "white",
-    padding: 10,
-  },
   row: { flexDirection: "row" },
   button: {
     height: 50,
@@ -226,6 +262,15 @@ const styles = StyleSheet.create({
   },
   wideButton: {
     width: 100,
+  },
+  item: {
+    backgroundColor: "#f9c2ff",
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+  },
+  title: {
+    fontSize: 32,
   },
 });
 
