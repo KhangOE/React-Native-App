@@ -7,7 +7,7 @@ import {
   SafeAreaView,
   FlatList,
 } from "react-native";
-
+import AsyncStorage from "@react-native-community/async-storage";
 const App = () => {
   const [text, setText] = useState("");
   const [prev, setPrev] = useState("");
@@ -33,7 +33,7 @@ const App = () => {
     setText("");
     setResult();
     setMathOperator("");
-    setHistory([]);
+    //setHistory([]);
   };
 
   const selectOperand = (operand) => {
@@ -50,8 +50,34 @@ const App = () => {
   };
 
   useEffect(() => {
-    setHistory((state) => [{ text: prev, result: result }, ...state]);
+    if(text){
+      setHistory((state) => [{ text: prev, result: result }, ...state]);
+    }
+   
   }, [result]);
+
+   useEffect(()=>{
+  if(history.length){
+  AsyncStorage.setItem(
+  'history',
+  JSON.stringify(history))
+  //console.log(history)
+  }
+ },[history])
+
+
+ useEffect(()=>{
+    AsyncStorage.getItem('history', (err, result) => {
+          setHistory(JSON.parse(result));
+        });
+ },[])
+  /*
+  useEffect(()=>{
+        AsyncStorage.getItem('history', (err, result) => {
+          setHistory(JSON.parse(result));
+        });
+  },[])*/
+
 
   const renderItem = ({ item }) => {
     return (
