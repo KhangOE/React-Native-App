@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-import React, { useState, useEffect, useReducer } from "react";
-import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
-import AsyncStorage from '@react-native-community/async-storage';
-=======
 import React, { useState, useEffect } from "react";
 import {
   Text,
@@ -13,14 +8,12 @@ import {
   FlatList,
 } from "react-native";
 
->>>>>>> cee4e25568fea699367409e1b1f96276a646e5b6
 const App = () => {
   const [text, setText] = useState("");
   const [prev, setPrev] = useState("");
   const [result, setResult] = useState();
   const [mathOperator, setMathOperator] = useState("");
   const [history, setHistory] = useState([]);
-  const [showHistory,setShowHistory] = useState(false)
 
   const checkResult = () => {
     try {
@@ -40,6 +33,7 @@ const App = () => {
     setText("");
     setResult();
     setMathOperator("");
+    setHistory([]);
   };
 
   const selectOperand = (operand) => {
@@ -56,30 +50,6 @@ const App = () => {
   };
 
   useEffect(() => {
-<<<<<<< HEAD
-    if(text){
-      setHistory((state) => [...state, { text: prev, result: result }]);
-    }
-  }, [result]);
-
-
-
- useEffect(()=>{
-  if(history.length){
-  AsyncStorage.setItem(
-  'history',
-  JSON.stringify(history))
-  console.log(history)
-  }
- },[history])
-
-
- useEffect(()=>{
-    AsyncStorage.getItem('history', (err, result) => {
-          setHistory(JSON.parse(result));
-        });
- },[])
-=======
     setHistory((state) => [{ text: prev, result: result }, ...state]);
   }, [result]);
 
@@ -92,7 +62,6 @@ const App = () => {
       </View>
     );
   };
->>>>>>> cee4e25568fea699367409e1b1f96276a646e5b6
 
   return (
     <View style={styles.container}>
