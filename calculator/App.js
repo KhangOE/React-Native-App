@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
-
+import AsyncStorage from '@react-native-community/async-storage';
 const App = () => {
   const [text, setText] = useState("");
   const [prev, setPrev] = useState("");
   const [result, setResult] = useState();
   const [mathOperator, setMathOperator] = useState("");
   const [history, setHistory] = useState([]);
+  const [showHistory,setShowHistory] = useState(false)
 
   const checkResult = () => {
     try {
@@ -26,7 +27,6 @@ const App = () => {
     setText("");
     setResult();
     setMathOperator("");
-    setHistory([]);
   };
 
   const selectOperand = (operand) => {
@@ -39,8 +39,28 @@ const App = () => {
   };
 
   useEffect(() => {
-    setHistory((state) => [...state, { text: prev, result: result }]);
+    if(text){
+      setHistory((state) => [...state, { text: prev, result: result }]);
+    }
   }, [result]);
+
+
+
+ useEffect(()=>{
+  if(history.length){
+  AsyncStorage.setItem(
+  'history',
+  JSON.stringify(history))
+  console.log(history)
+  }
+ },[history])
+
+
+ useEffect(()=>{
+    AsyncStorage.getItem('history', (err, result) => {
+          setHistory(JSON.parse(result));
+        });
+ },[])
 
   return (
     <View style={styles.container}>
