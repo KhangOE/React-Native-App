@@ -74,7 +74,7 @@ const App = () => {
   }
  },[history])
 
-  useEffect( async ()=>{
+  useEffect(() => { async ()=>{
   try {
     const  value = await AsyncStorage.getItem('history');
     if (value !== null) {
@@ -84,7 +84,7 @@ const App = () => {
   } catch (error) {
     // Error retrieving data
   }
-  },[])
+  }},[])
 
 
   const renderItem = ({ item }) => {
