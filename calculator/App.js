@@ -11,7 +11,7 @@ import AsyncStorage from "@react-native-community/async-storage";
 const App = () => {
   const [text, setText] = useState("");
   const [prev, setPrev] = useState("");
-  const [result, setResult] = useState();
+  const [result, setResult] = useState("");
   const [mathOperator, setMathOperator] = useState("");
   const [history, setHistory] = useState([]);
 
@@ -65,7 +65,7 @@ const App = () => {
    
   }, [result]);
 
-   useEffect(()=>{
+  useEffect(()=>{
   if(history.length){
   AsyncStorage.setItem(
   'history',
@@ -74,18 +74,17 @@ const App = () => {
   }
  },[history])
 
-
- useEffect(()=>{
-    AsyncStorage.getItem('history', (err, result) => {
-          setHistory(JSON.parse(result));
-        });
- },[])
-  /*
-  useEffect(()=>{
-        AsyncStorage.getItem('history', (err, result) => {
-          setHistory(JSON.parse(result));
-        });
-  },[])*/
+  useEffect( async ()=>{
+  try {
+    const  value = await AsyncStorage.getItem('history');
+    if (value !== null) {
+      setHistory(JSON.parse(value))
+      console.log(value);
+    }
+  } catch (error) {
+    // Error retrieving data
+  }
+  },[])
 
 
   const renderItem = ({ item }) => {
