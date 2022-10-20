@@ -65,7 +65,7 @@ const App = () => {
    
   }, [result]);
 
-  useEffect(()=>{
+   useEffect(()=>{
   if(history.length){
   AsyncStorage.setItem(
   'history',
@@ -74,17 +74,28 @@ const App = () => {
   }
  },[history])
 
-  useEffect(() => { async ()=>{
+
+/*
+ useEffect(()=>{
+    AsyncStorage.getItem('history', (err, result) => {
+          setHistory(JSON.parse(result));
+        });
+ },[])*/
+  
+  useEffect( async ()=>{
+  
   try {
     const  value = await AsyncStorage.getItem('history');
     if (value !== null) {
       setHistory(JSON.parse(value))
       console.log(value);
     }
+  
   } catch (error) {
     // Error retrieving data
   }
-  }},[])
+
+  },[])
 
 
   const renderItem = ({ item }) => {
