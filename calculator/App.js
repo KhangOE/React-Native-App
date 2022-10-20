@@ -49,6 +49,15 @@ const App = () => {
     setText((pre) => pre.slice(0, -1));
   };
 
+  const selectPercent = () => {
+    if (mathOperator) {
+      let string = text.slice(text.indexOf(mathOperator) + 1, text.length);
+      setText(text.replace(string, parseFloat(string) / 100));
+    } else {
+      setText(parseFloat(text) / 100);
+    }
+  };
+
   useEffect(() => {
     setHistory((state) => [{ text: prev, result: result }, ...state]);
   }, [result]);
@@ -106,7 +115,7 @@ const App = () => {
           <TouchableOpacity style={styles.button} onPress={delOneCharacter}>
             <Text>DEL</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={selectPercent}>
             <Text>%</Text>
           </TouchableOpacity>
           <TouchableOpacity
