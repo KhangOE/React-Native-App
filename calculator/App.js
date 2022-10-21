@@ -1,20 +1,24 @@
 import React, { useState, useEffect } from "react";
 import {
   Text,
-  TouchableOpacity,
   View,
   StyleSheet,
   SafeAreaView,
   FlatList,
+  TextInput,
+  StatusBar,
 } from "react-native";
-//import AsyncStorage from "@react-native-community/async-storage";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Button from "./Button";
 const App = () => {
   const [text, setText] = useState("");
   const [prev, setPrev] = useState("");
   const [result, setResult] = useState("");
-  const [mathOperator, setMathOperator] = useState("");
+  const [mathOperator, setMathOperator] = useState();
   const [history, setHistory] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [search, setSearch] = useState("");
+  const [isEmpty, setIsEmpty] = useState(true);
 
   const checkResult = () => {
     try {
@@ -23,6 +27,7 @@ const App = () => {
         setResult(res);
         setPrev(text);
         setText(res.toString());
+        setMathOperator("");
       }
     } catch (error) {
       return;
@@ -34,16 +39,38 @@ const App = () => {
     setText("");
     setResult();
     setMathOperator("");
-    //setHistory([]);
+    setHistory([]);
+    setFilteredData([]);
+    AsyncStorage.setItem("history", "");
+  };
+
+  const handleClear = () => {
+    setPrev("");
+    setText("");
+    setResult();
+    setMathOperator("");
   };
 
   const selectOperand = (operand) => {
-    setText((state) => state + operand);
+    if (mathOperator) {
+      if (text[text.indexOf(mathOperator) + 1] != "0") {
+        setText((state) => state + operand);
+      } else if (text[text.indexOf(mathOperator) + 2] == ".") {
+        setText((state) => state + operand);
+      }
+    } else {
+      setText((state) => (+(state + operand)).toString());
+    }
   };
 
   const selectAction = (action) => {
-    setMathOperator(action);
-    setText((state) => state + action);
+    if (mathOperator) {
+      setText(text.replace(mathOperator, action));
+      setMathOperator(action);
+    } else {
+      setMathOperator(action);
+      setText((state) => state + action);
+    }
   };
 
   const delOneCharacter = () => {
@@ -51,58 +78,90 @@ const App = () => {
   };
 
   const selectPercent = () => {
-    if (mathOperator) {
-      let string = text.slice(text.indexOf(mathOperator) + 1, text.length);
-      setText(text.replace(string, parseFloat(string) / 100));
+    if (text) {
+      if (mathOperator) {
+        let string = text.slice(text.indexOf(mathOperator) + 1, text.length);
+        setText(text.replace(string, parseFloat(string) / 100));
+      } else {
+        setText((parseFloat(text) / 100).toString());
+      }
+    }
+  };
+
+  const selectDot = () => {
+    if (text) {
+      if (text.indexOf(".") > -1) {
+        if (text.indexOf(mathOperator) > text.lastIndexOf(".")) {
+          setText((pre) => pre + ".");
+        }
+      } else {
+        setText((pre) => pre + ".");
+      }
     } else {
-      setText(parseFloat(text) / 100);
+      setText("0.");
+    }
+  };
+
+  const searchFilter = (text) => {
+    if (text) {
+      const newData = history.filter((item) => {
+        const itemData = item.text
+          ? item.result
+            ? item.text + item.result
+            : ""
+          : "";
+        return itemData.indexOf(text) > -1;
+      });
+      setFilteredData(newData);
+      setSearch(text);
+    } else {
+      setFilteredData(history);
+      setSearch(text);
     }
   };
 
   useEffect(() => {
-    if(text){
-      setHistory((state) => [{ text: prev, result: result }, ...state]);
+    if (!text || text === "0") {
+      setIsEmpty(true);
+    } else {
+      setIsEmpty(false);
     }
-   
+  }, [text]);
+
+  useEffect(() => {
+    if (text) {
+      setHistory((state) => [{ text: prev, result: result }, ...state]);
+      setFilteredData((state) => [{ text: prev, result: result }, ...state]);
+    }
   }, [result]);
 
-   useEffect(()=>{
-  if(history.length){
-  AsyncStorage.setItem(
-  'history',
-  JSON.stringify(history))
-  //console.log(history)
-  }
- },[history])
-
-
-/*
- useEffect(()=>{
-    AsyncStorage.getItem('history', (err, result) => {
-          setHistory(JSON.parse(result));
-        });
- },[])*/
-  
-  useEffect( async ()=>{
-  
-  try {
-    const  value = await AsyncStorage.getItem('history');
-    if (value !== null) {
-      setHistory(JSON.parse(value))
-      console.log(value);
+  useEffect(() => {
+    if (history.length) {
+      AsyncStorage.setItem("history", JSON.stringify(history));
+      //console.log(history)
     }
-  
-  } catch (error) {
-    // Error retrieving data
-  }
+  }, [history]);
 
-  },[])
-
+  useEffect(() => {
+    const fetchLocalStorage = async () => {
+      try {
+        const value = await AsyncStorage.getItem("history");
+        if (value !== null) {
+          setHistory(JSON.parse(value));
+          setFilteredData(JSON.parse(value));
+          // console.log(value);
+        }
+      } catch (error) {
+        // Error retrieving data
+      }
+    };
+    fetchLocalStorage();
+  }, []);
 
   const renderItem = ({ item }) => {
     return (
       <View>
-        <Text style={{ textAlign: "right" }}>
+        <Text style={styles.item}>
           {item.text ? item.text + "=" + item.result : " "}
         </Text>
       </View>
@@ -111,182 +170,106 @@ const App = () => {
 
   return (
     <View style={styles.container}>
-      <SafeAreaView style={{ height: 100, width: 200 }}>
-        <FlatList
-          inverted
-          showsHorizontalScrollIndicator={false}
-          data={history}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => index}
+      <StatusBar barStyle="light-content" />
+      <SafeAreaView>
+        <TextInput
+          style={styles.searchBar}
+          value={search}
+          placeholder="search ..."
+          onChangeText={(text) => searchFilter(text)}
         />
+        <SafeAreaView style={styles.historyField}>
+          <FlatList
+            inverted
+            showsHorizontalScrollIndicator={false}
+            data={filteredData}
+            renderItem={renderItem}
+            keyExtractor={(item, index) => index}
+          />
+        </SafeAreaView>
+        <Text style={styles.prevValue}>{prev || " "}</Text>
+        <Text style={styles.value}>{text || "0"}</Text>
+        <View>
+          <View style={styles.row}>
+            {isEmpty ? (
+              <Button text="AC" theme="secondary" onPress={handleClearAll} />
+            ) : (
+              <Button text="C" theme="secondary" onPress={handleClear} />
+            )}
+            <Button text="Del" theme="secondary" onPress={delOneCharacter} />
+            <Button text="%" theme="secondary" onPress={selectPercent} />
+            <Button text="/" theme="accent" onPress={() => selectAction("/")} />
+          </View>
+
+          <View style={styles.row}>
+            <Button text="7" onPress={() => selectOperand("7")} />
+            <Button text="8" onPress={() => selectOperand("8")} />
+            <Button text="9" onPress={() => selectOperand("9")} />
+            <Button text="x" theme="accent" onPress={() => selectAction("*")} />
+          </View>
+
+          <View style={styles.row}>
+            <Button text="4" onPress={() => selectOperand("4")} />
+            <Button text="5" onPress={() => selectOperand("5")} />
+            <Button text="6" onPress={() => selectOperand("6")} />
+            <Button text="-" theme="accent" onPress={() => selectAction("-")} />
+          </View>
+
+          <View style={styles.row}>
+            <Button text="1" onPress={() => selectOperand("1")} />
+            <Button text="2" onPress={() => selectOperand("2")} />
+            <Button text="3" onPress={() => selectOperand("3")} />
+            <Button text="+" theme="accent" onPress={() => selectAction("+")} />
+          </View>
+
+          <View style={styles.row}>
+            <Button text="0" size="double" onPress={() => selectOperand("0")} />
+            <Button text="." onPress={selectDot} />
+            <Button text="=" theme="accent" onPress={checkResult} />
+          </View>
+        </View>
       </SafeAreaView>
-      <View style={{ borderWidth: 2, width: 200 }}>
-        <Text
-          style={{
-            padding: 10,
-            fontSize: 15,
-            color: "white",
-            textAlign: "right",
-            backgroundColor: "#a66",
-          }}
-        >
-          {prev || " "}
-        </Text>
-        <Text
-          style={{
-            padding: 10,
-            fontSize: 25,
-            color: "white",
-            textAlign: "right",
-            backgroundColor: "#a66",
-          }}
-        >
-          {text || "0"}
-        </Text>
-      </View>
-      <View>
-        <View style={styles.row}>
-          <TouchableOpacity onPress={handleClearAll} style={styles.button}>
-            <Text>AC</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={delOneCharacter}>
-            <Text>DEL</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={selectPercent}>
-            <Text>%</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => selectAction("/")}
-            style={styles.button}
-          >
-            <Text>/</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.row}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => selectOperand("7")}
-          >
-            <Text>7</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => selectOperand("8")}
-          >
-            <Text>8</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => selectOperand("9")}
-          >
-            <Text>9</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => selectAction("*")}
-          >
-            <Text>*</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.row}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => selectOperand("4")}
-          >
-            <Text>4</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => selectOperand("5")}
-          >
-            <Text>5</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => selectOperand("6")}
-          >
-            <Text>6</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => selectAction("-")}
-          >
-            <Text>-</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.row}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => selectOperand("1")}
-          >
-            <Text>1</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => selectOperand("2")}
-          >
-            <Text>2</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => selectOperand("3")}
-          >
-            <Text>3</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => selectAction("+")}
-          >
-            <Text>+</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.row}>
-          <TouchableOpacity
-            style={[styles.button, styles.wideButton]}
-            onPress={() => selectOperand("0")}
-          >
-            <Text>0</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
-            <Text>.</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={checkResult}>
-            <Text>=</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "grey",
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: "#202020",
+    justifyContent: "flex-end",
+  },
+  searchBar: {
+    height: 40,
+    backgroundColor: "white",
+    borderWidth: 1,
+    paddingLeft: 20,
+    margin: 5,
+    borderColor: "#009688",
+  },
+  historyField: {
+    height: 150,
+    // flex: 1,
+    paddingRight: 20,
+    marginBottom: 20,
+    // backgroundColor: "#a66",
+  },
+  item: { color: "#fff", fontSize: 20, textAlign: "right" },
+  prevValue: {
+    color: "#fff",
+    fontSize: 20,
+    textAlign: "right",
+    marginRight: 20,
+    marginBottom: 10,
+  },
+  value: {
+    color: "#fff",
+    fontSize: 40,
+    textAlign: "right",
+    marginRight: 20,
+    marginBottom: 10,
   },
   row: { flexDirection: "row" },
-  button: {
-    height: 50,
-    width: 50,
-    backgroundColor: "white",
-    color: "white",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  wideButton: {
-    width: 100,
-  },
-  item: {
-    backgroundColor: "#f9c2ff",
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-  },
-  title: {
-    fontSize: 32,
-  },
 });
 
 export default App;
