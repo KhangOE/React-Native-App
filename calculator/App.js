@@ -7,9 +7,11 @@ import {
   FlatList,
   TextInput,
   StatusBar,
+  Button,
 } from "react-native";
+import { History } from "./history";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Button from "./Button";
+import MyButton from "./MyButton";
 const App = () => {
   const [text, setText] = useState("");
   const [prev, setPrev] = useState("");
@@ -19,6 +21,7 @@ const App = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [search, setSearch] = useState("");
   const [isEmpty, setIsEmpty] = useState(true);
+  const [showHis, setShowHis] = useState(false);
 
   const checkResult = () => {
     try {
@@ -172,7 +175,7 @@ const App = () => {
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
       <SafeAreaView>
-        <TextInput
+        {/* <TextInput
           style={styles.searchBar}
           value={search}
           placeholder="search ..."
@@ -186,46 +189,80 @@ const App = () => {
             renderItem={renderItem}
             keyExtractor={(item, index) => index}
           />
-        </SafeAreaView>
+        </SafeAreaView> */}
+        <Button
+          title="History"
+          onPress={() => {
+            setShowHis((state) => !state);
+          }}
+        ></Button>
+
+        <History
+          show={showHis}
+          setShow={setShowHis}
+          data={filteredData}
+          searchFilter={searchFilter}
+          text={search}
+        />
         <Text style={styles.prevValue}>{prev || " "}</Text>
         <Text style={styles.value}>{text || "0"}</Text>
         <View>
           <View style={styles.row}>
             {isEmpty ? (
-              <Button text="AC" theme="secondary" onPress={handleClearAll} />
+              <MyButton text="AC" theme="secondary" onPress={handleClearAll} />
             ) : (
-              <Button text="C" theme="secondary" onPress={handleClear} />
+              <MyButton text="C" theme="secondary" onPress={handleClear} />
             )}
-            <Button text="Del" theme="secondary" onPress={delOneCharacter} />
-            <Button text="%" theme="secondary" onPress={selectPercent} />
-            <Button text="/" theme="accent" onPress={() => selectAction("/")} />
+            <MyButton text="Del" theme="secondary" onPress={delOneCharacter} />
+            <MyButton text="%" theme="secondary" onPress={selectPercent} />
+            <MyButton
+              text="/"
+              theme="accent"
+              onPress={() => selectAction("/")}
+            />
           </View>
 
           <View style={styles.row}>
-            <Button text="7" onPress={() => selectOperand("7")} />
-            <Button text="8" onPress={() => selectOperand("8")} />
-            <Button text="9" onPress={() => selectOperand("9")} />
-            <Button text="x" theme="accent" onPress={() => selectAction("*")} />
+            <MyButton text="7" onPress={() => selectOperand("7")} />
+            <MyButton text="8" onPress={() => selectOperand("8")} />
+            <MyButton text="9" onPress={() => selectOperand("9")} />
+            <MyButton
+              text="x"
+              theme="accent"
+              onPress={() => selectAction("*")}
+            />
           </View>
 
           <View style={styles.row}>
-            <Button text="4" onPress={() => selectOperand("4")} />
-            <Button text="5" onPress={() => selectOperand("5")} />
-            <Button text="6" onPress={() => selectOperand("6")} />
-            <Button text="-" theme="accent" onPress={() => selectAction("-")} />
+            <MyButton text="4" onPress={() => selectOperand("4")} />
+            <MyButton text="5" onPress={() => selectOperand("5")} />
+            <MyButton text="6" onPress={() => selectOperand("6")} />
+            <MyButton
+              text="-"
+              theme="accent"
+              onPress={() => selectAction("-")}
+            />
           </View>
 
           <View style={styles.row}>
-            <Button text="1" onPress={() => selectOperand("1")} />
-            <Button text="2" onPress={() => selectOperand("2")} />
-            <Button text="3" onPress={() => selectOperand("3")} />
-            <Button text="+" theme="accent" onPress={() => selectAction("+")} />
+            <MyButton text="1" onPress={() => selectOperand("1")} />
+            <MyButton text="2" onPress={() => selectOperand("2")} />
+            <MyButton text="3" onPress={() => selectOperand("3")} />
+            <MyButton
+              text="+"
+              theme="accent"
+              onPress={() => selectAction("+")}
+            />
           </View>
 
           <View style={styles.row}>
-            <Button text="0" size="double" onPress={() => selectOperand("0")} />
-            <Button text="." onPress={selectDot} />
-            <Button text="=" theme="accent" onPress={checkResult} />
+            <MyButton
+              text="0"
+              size="double"
+              onPress={() => selectOperand("0")}
+            />
+            <MyButton text="." onPress={selectDot} />
+            <MyButton text="=" theme="accent" onPress={checkResult} />
           </View>
         </View>
       </SafeAreaView>
@@ -249,10 +286,8 @@ const styles = StyleSheet.create({
   },
   historyField: {
     height: 150,
-    // flex: 1,
     paddingRight: 20,
     marginBottom: 20,
-    // backgroundColor: "#a66",
   },
   item: { color: "#fff", fontSize: 20, textAlign: "right" },
   prevValue: {
