@@ -6,7 +6,9 @@ import {
   StyleSheet,
   SafeAreaView,
   FlatList,
+  Button
 } from "react-native";
+import { History } from "./history";
 //import AsyncStorage from "@react-native-community/async-storage";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const App = () => {
@@ -15,6 +17,7 @@ const App = () => {
   const [result, setResult] = useState("");
   const [mathOperator, setMathOperator] = useState("");
   const [history, setHistory] = useState([]);
+  const [showHis,setShowHis] = useState(false)
 
   const checkResult = () => {
     try {
@@ -111,15 +114,11 @@ const App = () => {
 
   return (
     <View style={styles.container}>
-      <SafeAreaView style={{ height: 100, width: 200 }}>
-        <FlatList
-          inverted
-          showsHorizontalScrollIndicator={false}
-          data={history}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => index}
-        />
-      </SafeAreaView>
+   
+       <Button  title="History" onPress={()=>{setShowHis(state => !state)}}></Button>
+      
+    <History show={showHis} setShow={setShowHis} data={history} />
+     
       <View style={{ borderWidth: 2, width: 200 }}>
         <Text
           style={{
