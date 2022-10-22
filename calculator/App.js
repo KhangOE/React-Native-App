@@ -8,6 +8,7 @@ import {
   TextInput,
   StatusBar,
   Button,
+  TouchableOpacity
 } from "react-native";
 import { History } from "./history";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -145,6 +146,9 @@ const App = () => {
     }
   }, [history]);
 
+  useEffect(()=>{
+     searchFilter(text)
+  },[text])
   useEffect(() => {
     const fetchLocalStorage = async () => {
       try {
@@ -163,11 +167,13 @@ const App = () => {
 
   const renderItem = ({ item }) => {
     return (
+      <TouchableOpacity onPress={()=> {setText(item.text)}}>
       <View>
         <Text style={styles.item}>
           {item.text ? item.text + "=" + item.result : " "}
         </Text>
       </View>
+      </TouchableOpacity>
     );
   };
 
@@ -180,7 +186,7 @@ const App = () => {
           value={search}
           placeholder="search ..."
           onChangeText={(text) => searchFilter(text)}
-        />
+        /> */}
         <SafeAreaView style={styles.historyField}>
           <FlatList
             inverted
@@ -189,7 +195,7 @@ const App = () => {
             renderItem={renderItem}
             keyExtractor={(item, index) => index}
           />
-        </SafeAreaView> */}
+        </SafeAreaView>
         <Button
           title="History"
           onPress={() => {

@@ -65,7 +65,8 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     marginHorizontal: 8,
     backgroundColor:"#2FA4FF",
-    borderRadius: 16
+    borderRadius: 16,
+    overflow:"hidden"
   },
   title: {
     fontSize: 32,
@@ -78,6 +79,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingLeft: 20,
     borderColor: "#93FFD8",
-    paddingHorizontal: 8
+    paddingHorizontal: 8,
+    color:"#93FFD8"
   },
 });
