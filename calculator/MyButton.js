@@ -22,8 +22,8 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   buttonDouble: {
-    width: screen.width / 2 - 10,
-    flex: 0,
+    maxWidth: screen.width / 2 - 10,
+    flex: 2,
     alignItems: "flex-start",
     paddingLeft: 40,
   },

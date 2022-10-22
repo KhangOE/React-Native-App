@@ -10,20 +10,15 @@ import {
   Button,
   TextInput,
 } from "react-native";
-import { useState } from "react";
-
-const Item = ({ item }) => (
-  <View style={styles.item}>
-    <Text style={styles.title}>
-      {item.text} = {item.result}
-    </Text>
-  </View>
-);
 
 export const History = (props) => {
-  const [search, setSearch] = useState("");
-
-  const renderItem = ({ item }) => <Item item={item} />;
+  const renderItem = ({ item }) => (
+    <View style={styles.item}>
+      <Text style={styles.title}>
+        {item.text} = {item.result}
+      </Text>
+    </View>
+  );
 
   return (
     <Modal visible={props.show}>
@@ -32,7 +27,7 @@ export const History = (props) => {
         onPress={() => {
           props.setShow((state) => !state);
         }}
-      ></Button>
+      />
       <TextInput
         style={styles.searchBar}
         value={props.search}
@@ -45,9 +40,10 @@ export const History = (props) => {
           showsHorizontalScrollIndicator={false}
           data={props.data}
           renderItem={renderItem}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item, index) => index}
         />
       </SafeAreaView>
+      <Button title="Delete history" onPress={props.clearHistory} />
     </Modal>
   );
 };
@@ -56,14 +52,25 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: StatusBar.currentHeight || 0,
+    backgroundColor: "#202020",
   },
   item: {
-    backgroundColor: "#f9c2ff",
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
+    color: "white",
   },
   title: {
     fontSize: 32,
+    color: "white",
+    // textAlign: "right",
+  },
+  searchBar: {
+    height: 40,
+    backgroundColor: "white",
+    borderWidth: 1,
+    paddingLeft: 20,
+    margin: 5,
+    borderColor: "#009688",
   },
 });

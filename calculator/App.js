@@ -20,7 +20,7 @@ const App = () => {
   const [history, setHistory] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [search, setSearch] = useState("");
-  const [isEmpty, setIsEmpty] = useState(true);
+  // const [isEmpty, setIsEmpty] = useState(true);
   const [showHis, setShowHis] = useState(false);
 
   const checkResult = () => {
@@ -41,7 +41,7 @@ const App = () => {
     setPrev("");
     setText("");
     setResult();
-    setMathOperator("");
+    setMathOperator();
     setHistory([]);
     setFilteredData([]);
     AsyncStorage.setItem("history", "");
@@ -123,13 +123,13 @@ const App = () => {
     }
   };
 
-  useEffect(() => {
-    if (!text || text === "0") {
-      setIsEmpty(true);
-    } else {
-      setIsEmpty(false);
-    }
-  }, [text]);
+  // useEffect(() => {
+  //   if (!text || text === "0") {
+  //     setIsEmpty(true);
+  //   } else {
+  //     setIsEmpty(false);
+  //   }
+  // }, [text]);
 
   useEffect(() => {
     if (text) {
@@ -203,17 +203,14 @@ const App = () => {
           data={filteredData}
           searchFilter={searchFilter}
           text={search}
+          clearHistory={handleClearAll}
         />
         <Text style={styles.prevValue}>{prev || " "}</Text>
         <Text style={styles.value}>{text || "0"}</Text>
         <View>
           <View style={styles.row}>
-            {isEmpty ? (
-              <MyButton text="AC" theme="secondary" onPress={handleClearAll} />
-            ) : (
-              <MyButton text="C" theme="secondary" onPress={handleClear} />
-            )}
-            <MyButton text="Del" theme="secondary" onPress={delOneCharacter} />
+            <MyButton text="C" theme="secondary" onPress={handleClear} />
+            <MyButton text="DEL" theme="secondary" onPress={delOneCharacter} />
             <MyButton text="%" theme="secondary" onPress={selectPercent} />
             <MyButton
               text="/"
@@ -292,7 +289,7 @@ const styles = StyleSheet.create({
   item: { color: "#fff", fontSize: 20, textAlign: "right" },
   prevValue: {
     color: "#fff",
-    fontSize: 20,
+    fontSize: 32,
     textAlign: "right",
     marginRight: 20,
     marginBottom: 10,
