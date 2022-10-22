@@ -181,13 +181,14 @@ const App = () => {
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
       <SafeAreaView>
+      
         {/* <TextInput
           style={styles.searchBar}
           value={search}
           placeholder="search ..."
           onChangeText={(text) => searchFilter(text)}
         /> */}
-        <SafeAreaView style={styles.historyField}>
+         <SafeAreaView style={styles.historyField}>
           <FlatList
             inverted
             showsHorizontalScrollIndicator={false}
@@ -199,7 +200,8 @@ const App = () => {
         <Button
           title="History"
           onPress={() => {
-            setShowHis((state) => !state);
+            setShowHis((state) => !state) 
+            setText('')
           }}
         ></Button>
 
@@ -207,6 +209,7 @@ const App = () => {
           show={showHis}
           setShow={setShowHis}
           data={filteredData}
+          setdata={setSearch}
           searchFilter={searchFilter}
           text={search}
           clearHistory={handleClearAll}

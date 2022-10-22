@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   SafeAreaView,
   View,
@@ -12,6 +12,10 @@ import {
 } from "react-native";
 
 export const History = (props) => {
+
+  useEffect(()=>{
+      props.setdata('')
+  },[])
   const renderItem = ({ item }) => (
     <View style={styles.item}>
       <Text style={styles.title}>
@@ -20,6 +24,7 @@ export const History = (props) => {
     </View>
   );
 
+  
   return (
     <Modal visible={props.show}>
       <Button
@@ -36,6 +41,7 @@ export const History = (props) => {
         placeholderTextColor={'#93FFD8'}
         onChangeText={(text) => props.searchFilter(text)}
       />
+
       <SafeAreaView style={styles.container}>
       <View>
         <FlatList
@@ -46,7 +52,8 @@ export const History = (props) => {
         />
            </View>
       </SafeAreaView>
-      <Button color={'#7900FF'} title="Delete history" onPress={props.clearHistory} />
+
+    <Button color={'#7900FF'} title="Delete history" onPress={props.clearHistory} />
     </Modal>
   );
 };
