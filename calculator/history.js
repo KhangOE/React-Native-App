@@ -23,6 +23,7 @@ export const History = (props) => {
   return (
     <Modal visible={props.show}>
       <Button
+      color={'#533483'}
         title="Cancle"
         onPress={() => {
           props.setShow((state) => !state);
@@ -32,9 +33,11 @@ export const History = (props) => {
         style={styles.searchBar}
         value={props.search}
         placeholder="search ..."
+        placeholderTextColor={'#F73D93'}
         onChangeText={(text) => props.searchFilter(text)}
       />
       <SafeAreaView style={styles.container}>
+      <View>
         <FlatList
           inverted
           showsHorizontalScrollIndicator={false}
@@ -42,8 +45,9 @@ export const History = (props) => {
           renderItem={renderItem}
           keyExtractor={(item, index) => index}
         />
+           </View>
       </SafeAreaView>
-      <Button title="Delete history" onPress={props.clearHistory} />
+      <Button color={'#533483'} title="Delete history" onPress={props.clearHistory} />
     </Modal>
   );
 };
@@ -51,26 +55,28 @@ export const History = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
+  //  marginTop: StatusBar.currentHeight || 0,
     backgroundColor: "#202020",
+    flexDirection:'column',
+    justifyContent:'flex-start'
   },
   item: {
-    padding: 20,
+    padding: 8,
     marginVertical: 8,
-    marginHorizontal: 16,
-    color: "white",
+    marginHorizontal: 8,
+    borderBottomWidth:2,
+    borderBottomColor:'#F73D93'
   },
   title: {
     fontSize: 32,
-    color: "white",
+   color: "#F73D93",
     // textAlign: "right",
   },
   searchBar: {
     height: 40,
-    backgroundColor: "white",
-    borderWidth: 1,
+    backgroundColor: "#202020",
+    borderBottomWidth: 1,
     paddingLeft: 20,
-    margin: 5,
-    borderColor: "#009688",
+    borderColor: "#F73D93",
   },
 });
