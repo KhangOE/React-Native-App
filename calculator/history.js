@@ -39,7 +39,6 @@ export const History = (props) => {
       <SafeAreaView style={styles.container}>
       <View>
         <FlatList
-          inverted
           showsHorizontalScrollIndicator={false}
           data={props.data}
           renderItem={renderItem}
