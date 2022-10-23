@@ -189,13 +189,17 @@ const App = () => {
           onChangeText={(text) => searchFilter(text)}
         /> */}
          <SafeAreaView style={styles.historyField}>
-          <FlatList
+          { (text.length > 0) ? <FlatList
             inverted
             showsHorizontalScrollIndicator={false}
             data={filteredData}
             renderItem={renderItem}
             keyExtractor={(item, index) => index}
-          />
+          /> : <View>
+          <Text style={{textAlign:"center",paddingVertical:70,color:'white',fontSize:40}}>
+              Suggestion
+          </Text>
+          </View>}
         </SafeAreaView>
         <Button
           title="History"
@@ -294,6 +298,7 @@ const styles = StyleSheet.create({
     height: 150,
     paddingRight: 20,
     marginBottom: 20,
+    alignItems:"center"
   },
   item: { color: "#fff", fontSize: 20, textAlign: "right" },
   prevValue: {
