@@ -1,5 +1,10 @@
 # CS526.N11
 
+## Prerequisite
+
+1. NodeJS 
+You can download the from the [nodejs.org](nodejs.org) web site.
+
 ## Getting started
 
 1. Clone this repo (for help see this [tutorial](https://help.github.com/articles/cloning-a-repository/)).
