@@ -222,7 +222,7 @@ const App = () => {
             <MyButton text="DEL" theme="secondary" onPress={delOneCharacter} />
             <MyButton text="%" theme="secondary" onPress={selectPercent} />
             <MyButton
-              text="/"
+              text="÷"
               theme="accent"
               onPress={() => selectAction("/")}
             />
