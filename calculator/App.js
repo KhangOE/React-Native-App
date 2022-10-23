@@ -167,7 +167,7 @@ const App = () => {
 
   const renderItem = ({ item }) => {
     return (
-      <TouchableOpacity onPress={()=> {setText(item.text)}}>
+      <TouchableOpacity onPress={()=> {setText(item.text),setPrev('')}}>
       <View>
         <Text style={styles.item}>
           {item.text ? item.text + "=" + item.result : " "}
@@ -188,19 +188,23 @@ const App = () => {
           placeholder="search ..."
           onChangeText={(text) => searchFilter(text)}
         /> */}
+        { text.length ?
          <SafeAreaView style={styles.historyField}>
-          { (text.length > 0) ? <FlatList
+           <FlatList
             inverted
             showsHorizontalScrollIndicator={false}
             data={filteredData}
             renderItem={renderItem}
             keyExtractor={(item, index) => index}
-          /> : <View>
-          <Text style={{textAlign:"center",paddingVertical:70,color:'white',fontSize:40}}>
-              Suggestion
-          </Text>
-          </View>}
-        </SafeAreaView>
+           
+          />
+           </SafeAreaView>
+           : <View style={{alignItems:"center",marginBottom:40}}>
+            <Text style={{color:"white",fontSize:30}}>
+           Suggestion
+            </Text>
+          </View> 
+       }
         <Button
           title="History"
           onPress={() => {
