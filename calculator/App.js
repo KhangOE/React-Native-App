@@ -233,7 +233,7 @@ const App = () => {
             <MyButton text="8" onPress={() => selectOperand("8")} />
             <MyButton text="9" onPress={() => selectOperand("9")} />
             <MyButton
-              text="x"
+              text="*"
               theme="accent"
               onPress={() => selectAction("*")}
             />
