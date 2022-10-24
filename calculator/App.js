@@ -21,7 +21,6 @@ const App = () => {
   const [history, setHistory] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [search, setSearch] = useState("");
-  // const [isEmpty, setIsEmpty] = useState(true);
   const [showHis, setShowHis] = useState(false);
 
   const checkResult = () => {
@@ -77,10 +76,6 @@ const App = () => {
     }
   };
 
-  const delOneCharacter = () => {
-    setText((pre) => pre.slice(0, -1));
-  };
-
   const selectPercent = () => {
     if (text) {
       if (mathOperator) {
@@ -88,6 +83,17 @@ const App = () => {
         if (string) setText(text.replace(string, parseFloat(string) / 100));
       } else {
         setText((parseFloat(text) / 100).toString());
+      }
+    }
+  };
+
+  const multiplyByMinusOne = () => {
+    if (text) {
+      if (mathOperator) {
+        let string = text.slice(text.indexOf(mathOperator) + 1, text.length);
+        if (string) setText(text.replace(string, parseFloat(string) * -1));
+      } else {
+        setText((parseFloat(text) * -1).toString());
       }
     }
   };
@@ -125,12 +131,6 @@ const App = () => {
   };
 
   useEffect(() => {
-    if (!text.includes(mathOperator)) {
-      setMathOperator();
-    }
-  }, [text]);
-
-  useEffect(() => {
     if (text) {
       setHistory((state) => [{ text: prev, result: result }, ...state]);
       setFilteredData((state) => [{ text: prev, result: result }, ...state]);
@@ -140,7 +140,6 @@ const App = () => {
   useEffect(() => {
     if (history.length) {
       AsyncStorage.setItem("history", JSON.stringify(history));
-      //console.log(history)
     }
   }, [history]);
 
@@ -154,7 +153,6 @@ const App = () => {
         if (value !== null) {
           setHistory(JSON.parse(value));
           setFilteredData(JSON.parse(value));
-          // console.log(value);
         }
       } catch (error) {
         // Error retrieving data
@@ -183,12 +181,6 @@ const App = () => {
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
       <SafeAreaView>
-        {/* <TextInput
-          style={styles.searchBar}
-          value={search}
-          placeholder="search ..."
-          onChangeText={(text) => searchFilter(text)}
-        /> */}
         {text.length ? (
           <SafeAreaView style={styles.historyField}>
             <FlatList
@@ -226,7 +218,11 @@ const App = () => {
         <View>
           <View style={styles.row}>
             <MyButton text="C" theme="secondary" onPress={handleClear} />
-            <MyButton text="DEL" theme="secondary" onPress={delOneCharacter} />
+            <MyButton
+              text="+/-"
+              theme="secondary"
+              onPress={multiplyByMinusOne}
+            />
             <MyButton text="%" theme="secondary" onPress={selectPercent} />
             <MyButton
               text="÷"
