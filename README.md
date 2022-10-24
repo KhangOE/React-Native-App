@@ -2,7 +2,7 @@
 | STT | Họ tên | MSSV | E-mail | Github |
 | :---: | --- | --- | --- | --- |
 | 1 | Nguyễn Duy Khang | 1952163 | 19521663@gm.uit.edu.vn | [khangOE](https://github.com/KhangOE)|
-| 2 | Nguyễn Viết Tiến | 20520805 | 20520805@gm.uit.edu.vn |  |
+| 2 | Nguyễn Viết Tiến | 20520805 | 20520805@gm.uit.edu.vn | [llewisd](https://github.com/llewisd)|
 | 3 |  |  |  |  |
 | 4 |  |  |  |
 ## Prerequisite
