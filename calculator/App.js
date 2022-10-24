@@ -8,7 +8,7 @@ import {
   TextInput,
   StatusBar,
   Button,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import { History } from "./history";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -124,13 +124,11 @@ const App = () => {
     }
   };
 
-  // useEffect(() => {
-  //   if (!text || text === "0") {
-  //     setIsEmpty(true);
-  //   } else {
-  //     setIsEmpty(false);
-  //   }
-  // }, [text]);
+  useEffect(() => {
+    if (!text.includes(mathOperator)) {
+      setMathOperator();
+    }
+  }, [text]);
 
   useEffect(() => {
     if (text) {
@@ -146,9 +144,9 @@ const App = () => {
     }
   }, [history]);
 
-  useEffect(()=>{
-     searchFilter(text)
-  },[text])
+  useEffect(() => {
+    searchFilter(text);
+  }, [text]);
   useEffect(() => {
     const fetchLocalStorage = async () => {
       try {
@@ -167,12 +165,16 @@ const App = () => {
 
   const renderItem = ({ item }) => {
     return (
-      <TouchableOpacity onPress={()=> {setText(item.text),setPrev('')}}>
-      <View>
-        <Text style={styles.item}>
-          {item.text ? item.text + "=" + item.result : " "}
-        </Text>
-      </View>
+      <TouchableOpacity
+        onPress={() => {
+          setText(item.text), setPrev("");
+        }}
+      >
+        <View>
+          <Text style={styles.item}>
+            {item.text ? item.text + "=" + item.result : " "}
+          </Text>
+        </View>
       </TouchableOpacity>
     );
   };
@@ -181,35 +183,32 @@ const App = () => {
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
       <SafeAreaView>
-      
         {/* <TextInput
           style={styles.searchBar}
           value={search}
           placeholder="search ..."
           onChangeText={(text) => searchFilter(text)}
         /> */}
-        { text.length ?
-         <SafeAreaView style={styles.historyField}>
-           <FlatList
-            inverted
-            showsHorizontalScrollIndicator={false}
-            data={filteredData}
-            renderItem={renderItem}
-            keyExtractor={(item, index) => index}
-           
-          />
-           </SafeAreaView>
-           : <View style={{alignItems:"center",marginBottom:40}}>
-            <Text style={{color:"white",fontSize:30}}>
-           Suggestion
-            </Text>
-          </View> 
-       }
+        {text.length ? (
+          <SafeAreaView style={styles.historyField}>
+            <FlatList
+              inverted
+              showsHorizontalScrollIndicator={false}
+              data={filteredData}
+              renderItem={renderItem}
+              keyExtractor={(item, index) => index}
+            />
+          </SafeAreaView>
+        ) : (
+          <View style={{ alignItems: "center", marginBottom: 40 }}>
+            <Text style={{ color: "white", fontSize: 30 }}>Suggestion</Text>
+          </View>
+        )}
         <Button
           title="History"
           onPress={() => {
-            setShowHis((state) => !state) 
-            setText('')
+            setShowHis((state) => !state);
+            setText("");
           }}
         ></Button>
 
@@ -302,7 +301,7 @@ const styles = StyleSheet.create({
     height: 150,
     paddingRight: 20,
     marginBottom: 20,
-    alignItems:"center"
+    alignItems: "center",
   },
   item: { color: "#fff", fontSize: 20, textAlign: "right" },
   prevValue: {
