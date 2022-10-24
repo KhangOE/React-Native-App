@@ -80,7 +80,10 @@ const App = () => {
     if (text) {
       if (mathOperator) {
         let string = text.slice(text.indexOf(mathOperator) + 1, text.length);
-        if (string) setText(text.replace(string, parseFloat(string) / 100));
+        if (string)
+          setText(
+            text.replace(new RegExp(string + "$"), parseFloat(string) / 100)
+          );
       } else {
         setText((parseFloat(text) / 100).toString());
       }
@@ -91,7 +94,12 @@ const App = () => {
     if (text) {
       if (mathOperator) {
         let string = text.slice(text.indexOf(mathOperator) + 1, text.length);
-        if (string) setText(text.replace(string, parseFloat(string) * -1));
+        if (string) {
+          console.log(string);
+          setText(
+            text.replace(new RegExp(string + "$"), parseFloat(string) * -1)
+          );
+        }
       } else {
         setText((parseFloat(text) * -1).toString());
       }
