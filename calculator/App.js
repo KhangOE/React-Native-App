@@ -67,19 +67,24 @@ const App = () => {
   };
 
   const selectAction = (action) => {
-    if (mathOperator) {
-      setText(text.replace(mathOperator, action));
-      setMathOperator(action);
-    } else {
-      setMathOperator(action);
-      setText((state) => state + action);
+    if (text) {
+      if (mathOperator) {
+        setText(text.replace(` ${mathOperator} `, ` ${action} `));
+        setMathOperator(action);
+      } else {
+        setMathOperator(action);
+        setText((state) => `${state} ${action} `);
+      }
     }
   };
 
   const selectPercent = () => {
     if (text) {
       if (mathOperator) {
-        let string = text.slice(text.indexOf(mathOperator) + 1, text.length);
+        let string = text.slice(
+          text.indexOf(` ${mathOperator} `) + 3,
+          text.length
+        );
         if (string)
           setText(
             text.replace(new RegExp(string + "$"), parseFloat(string) / 100)
@@ -93,9 +98,11 @@ const App = () => {
   const multiplyByMinusOne = () => {
     if (text) {
       if (mathOperator) {
-        let string = text.slice(text.indexOf(mathOperator) + 1, text.length);
+        let string = text.slice(
+          text.indexOf(` ${mathOperator} `) + 3,
+          text.length
+        );
         if (string) {
-          console.log(string);
           setText(
             text.replace(new RegExp(string + "$"), parseFloat(string) * -1)
           );
