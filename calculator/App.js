@@ -85,7 +85,7 @@ const App = () => {
     if (text) {
       if (mathOperator) {
         let string = text.slice(text.indexOf(mathOperator) + 1, text.length);
-        setText(text.replace(string, parseFloat(string) / 100));
+        if (string) setText(text.replace(string, parseFloat(string) / 100));
       } else {
         setText((parseFloat(text) / 100).toString());
       }
