@@ -56,9 +56,9 @@ const App = () => {
 
   const selectOperand = (operand) => {
     if (mathOperator) {
-      if (text[text.indexOf(mathOperator) + 1] != "0") {
+      if (text[text.indexOf(` ${mathOperator} `) + 3] != "0") {
         setText((state) => state + operand);
-      } else if (text[text.indexOf(mathOperator) + 2] == ".") {
+      } else if (text[text.indexOf(` ${mathOperator} `) + 4] == ".") {
         setText((state) => state + operand);
       }
     } else {
