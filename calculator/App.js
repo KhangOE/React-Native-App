@@ -285,6 +285,7 @@ const App = () => {
               text="+"
               theme="accent"
               onPress={() => selectAction("+")}
+              light={light}
             />
           </View>
 
@@ -293,9 +294,10 @@ const App = () => {
               text="0"
               size="double"
               onPress={() => selectOperand("0")}
+              light={light}
             />
-            <MyButton  text="." onPress={selectDot} />
-            <MyButton  text="=" theme="accent" onPress={checkResult} />
+            <MyButton  text="." onPress={selectDot} light={light} />
+            <MyButton  text="=" theme="accent" onPress={checkResult} light={light} />
           </View>
         </View>
       </SafeAreaView>
@@ -333,7 +335,7 @@ const styles = StyleSheet.create({
   },
   value: {
     color: "#fff",
-    fontSize: 40,
+    fontSize: 45,
     textAlign: "right",
     marginRight: 20,
     marginBottom: 10,
