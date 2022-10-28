@@ -22,6 +22,7 @@ const App = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [search, setSearch] = useState("");
   const [showHis, setShowHis] = useState(false);
+  const [light,setLight] = useState(true)
 
   const checkResult = () => {
     try {
@@ -184,7 +185,7 @@ const App = () => {
         }}
       >
         <View>
-          <Text style={styles.item}>
+          <Text style={[styles.item,light ? {color : 'black'} : {}]}>
             {item.text ? item.text + "=" + item.result : " "}
           </Text>
         </View>
@@ -193,7 +194,7 @@ const App = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,light ? {backgroundColor:'white'} : {} ]}>
       <StatusBar barStyle="light-content" />
       <SafeAreaView>
         {text.length ? (
@@ -208,17 +209,21 @@ const App = () => {
           </SafeAreaView>
         ) : (
           <View style={{ alignItems: "center", marginBottom: 40 }}>
-            <Text style={{ color: "white", fontSize: 30 }}>Suggestion</Text>
+            <Text style={ [ { color: "white", fontSize: 30 },light ? {color : 'black'}: {}]}>Suggestion</Text>
           </View>
         )}
-        <Button
-          title="History"
-          onPress={() => {
-            setShowHis((state) => !state);
-            setText("");
-          }}
-        ></Button>
-
+       <View style={{ flexDirection:'row',justifyContent:'space-between',paddingHorizontal:10}}>
+       <TouchableOpacity onPress={()=> setShowHis(!showHis)}>
+       <View style={light ? {color: 'black'} : {color:'white'}}>
+       HistoryIcon
+       </View>
+       </TouchableOpacity>
+       <TouchableOpacity onPress={()=> setLight(!light)}>
+          <View style={light ? {color: 'black'} : {color:'white'}}>
+          lightIcon
+          </View>
+       </TouchableOpacity>
+       </View>
         <History
           show={showHis}
           setShow={setShowHis}
@@ -228,51 +233,55 @@ const App = () => {
           text={search}
           clearHistory={handleClearAll}
         />
-        <Text style={styles.prevValue}>{prev || " "}</Text>
-        <Text style={styles.value}>{text || "0"}</Text>
+        <Text style={[styles.prevValue,light ? {color : 'black'} : {}]}>{prev || " "}</Text>
+        <Text style={[styles.value,light ? {color: "black"}  : {}]}>{text || "0"}</Text>
         <View>
           <View style={styles.row}>
-            <MyButton text="C" theme="secondary" onPress={handleClear} />
-            <MyButton
+            <MyButton  text="C" theme="secondary" onPress={handleClear} light={light} />
+            <MyButton 
               text="+/-"
               theme="secondary"
               onPress={multiplyByMinusOne}
+              light={light}
             />
-            <MyButton text="%" theme="secondary" onPress={selectPercent} />
-            <MyButton
+            <MyButton  text="%" theme="secondary" onPress={selectPercent}  light={light}/>
+            <MyButton 
               text="÷"
               theme="accent"
               onPress={() => selectAction("/")}
+              light={light}
             />
           </View>
 
           <View style={styles.row}>
-            <MyButton text="7" onPress={() => selectOperand("7")} />
-            <MyButton text="8" onPress={() => selectOperand("8")} />
-            <MyButton text="9" onPress={() => selectOperand("9")} />
-            <MyButton
+            <MyButton  text="7" onPress={() => selectOperand("7") } light={light} />
+            <MyButton  text="8" onPress={() => selectOperand("8")} light={light}/>
+            <MyButton  text="9" onPress={() => selectOperand("9")} light={light}/>
+            <MyButton 
               text="*"
               theme="accent"
               onPress={() => selectAction("*")}
-            />
+            
+              light={light}  />
           </View>
 
           <View style={styles.row}>
-            <MyButton text="4" onPress={() => selectOperand("4")} />
-            <MyButton text="5" onPress={() => selectOperand("5")} />
-            <MyButton text="6" onPress={() => selectOperand("6")} />
-            <MyButton
+            <MyButton  text="4" onPress={() => selectOperand("4")} light={light} />
+            <MyButton  text="5" onPress={() => selectOperand("5")}  light={light}/>
+            <MyButton  text="6" onPress={() => selectOperand("6")}  light={light}/>
+            <MyButton 
               text="-"
               theme="accent"
               onPress={() => selectAction("-")}
+              light={light}
             />
           </View>
 
           <View style={styles.row}>
-            <MyButton text="1" onPress={() => selectOperand("1")} />
-            <MyButton text="2" onPress={() => selectOperand("2")} />
-            <MyButton text="3" onPress={() => selectOperand("3")} />
-            <MyButton
+            <MyButton  text="1" onPress={() => selectOperand("1")} light={light} />
+            <MyButton  text="2" onPress={() => selectOperand("2")}  light={light}/>
+            <MyButton  text="3" onPress={() => selectOperand("3")} light={light} />
+            <MyButton 
               text="+"
               theme="accent"
               onPress={() => selectAction("+")}
@@ -280,13 +289,13 @@ const App = () => {
           </View>
 
           <View style={styles.row}>
-            <MyButton
+            <MyButton 
               text="0"
               size="double"
               onPress={() => selectOperand("0")}
             />
-            <MyButton text="." onPress={selectDot} />
-            <MyButton text="=" theme="accent" onPress={checkResult} />
+            <MyButton  text="." onPress={selectDot} />
+            <MyButton  text="=" theme="accent" onPress={checkResult} />
           </View>
         </View>
       </SafeAreaView>
