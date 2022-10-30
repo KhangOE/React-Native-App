@@ -221,17 +221,18 @@ const App = () => {
   return (
     <View style={[styles.container, light ? { backgroundColor: "white" } : {}]}>
       <StatusBar barStyle="light-content" />
-      <SafeAreaView>
+      <View></View>
+       <SafeAreaView>
         {text.length ? (
           <SafeAreaView style={styles.historyField}>
-            <FlatList
+         <FlatList
               inverted
               showsHorizontalScrollIndicator={false}
               data={filteredData}
               renderItem={renderItem}
               keyExtractor={(item, index) => index}
             />
-          </SafeAreaView>
+          </SafeAreaView> 
         ) : (
           <View style={{ alignItems: "center", marginBottom: 40 }}>
             <Text
