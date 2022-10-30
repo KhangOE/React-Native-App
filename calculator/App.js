@@ -174,6 +174,20 @@ const App = () => {
   }, []);
 
   useEffect(() => {
+    const fetchLocalStorage = async () => {
+      try {
+        const value = await AsyncStorage.getItem("light");
+        if (value !== null) {
+          setLight((value == light.toString()))
+        }
+      } catch (error) {
+        // Error retrieving data
+      }
+    };
+    fetchLocalStorage();
+  }, []);
+
+  useEffect(() => {
     searchFilter(text);
   }, [text]);
 
@@ -182,6 +196,11 @@ const App = () => {
 
     setFilteredData(history);
   }, [history]);
+
+  useEffect(() => {
+    
+    AsyncStorage.setItem("light", JSON.stringify(light));
+  }, [light]);
 
   const renderItem = ({ item }) => {
     return (
@@ -419,11 +438,7 @@ const styles = StyleSheet.create({
   },
   value: {
     color: "#fff",
-<<<<<<< HEAD
-    fontSize: 90,
-=======
     fontSize: 45,
->>>>>>> c0c313151bb5772f38ca46b0b180eb0061b2d548
     textAlign: "right",
     marginRight: 20,
     marginBottom: 10,
