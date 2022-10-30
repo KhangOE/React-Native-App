@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 60,
     fontStyle:"normal",
-    fontWeight: 500,
+   // fontWeight: 500,
   },
   textSecondary: {
     color: "#060606",

@@ -46,14 +46,14 @@ export const History = (props) => {
       />
 
       <SafeAreaView style={styles.container}>
-        <View>
+   
           <FlatList
             showsHorizontalScrollIndicator={false}
             data={props.data}
             renderItem={renderItem}
             keyExtractor={(item, index) => index}
           />
-        </View>
+     
       </SafeAreaView>
 
       <Button
