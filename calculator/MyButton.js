@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ({ onPress, text, size, theme,light }) => {
+export default ({ onPress, text, size, theme, light }) => {
   const buttonStyles = [styles.button];
   const textStyles = [styles.text];
 
@@ -48,18 +48,30 @@ export default ({ onPress, text, size, theme,light }) => {
   } else if (theme === "accent") {
     buttonStyles.push(styles.buttonAccent);
   }
-  console.log(light)
   return (
-    <TouchableOpacity onPress={onPress} style={[...buttonStyles, (light && !theme) ? {backgroundColor:'white',shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.36,
-    shadowRadius: 6.68,
-    
-    elevation: 11,} : {}]}>
-      <Text style={[...textStyles, (light && !theme) ? {color:'black'} : {}]}>{text}</Text>
+    <TouchableOpacity
+      onPress={onPress}
+      style={[
+        ...buttonStyles,
+        light && !theme
+          ? {
+              backgroundColor: "white",
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 5,
+              },
+              shadowOpacity: 0.36,
+              shadowRadius: 6.68,
+
+              elevation: 11,
+            }
+          : {},
+      ]}
+    >
+      <Text style={[...textStyles, light && !theme ? { color: "black" } : {}]}>
+        {text}
+      </Text>
     </TouchableOpacity>
   );
 };
