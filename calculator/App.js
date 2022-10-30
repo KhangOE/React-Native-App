@@ -57,12 +57,12 @@ const App = () => {
   const selectOperand = (operand) => {
     if (mathOperator) {
       if (text[text.indexOf(` ${mathOperator} `) + 3] != "0") {
-        setText((state) => state + operand);
+        setText((state) => state + operand );
       } else if (text[text.indexOf(` ${mathOperator} `) + 4] == ".") {
-        setText((state) => state + operand);
+        setText((state) => state + operand  );
       }
     } else {
-      setText((state) => (+(state + operand)).toString());
+      setText((state) => (+(state + operand )).toString());
     }
   };
 
@@ -251,7 +251,7 @@ const App = () => {
             <MyButton text="8" onPress={() => selectOperand("8")} />
             <MyButton text="9" onPress={() => selectOperand("9")} />
             <MyButton
-              text="*"
+              text="×"
               theme="accent"
               onPress={() => selectAction("*")}
             />
@@ -297,8 +297,9 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#202020",
+    backgroundColor: "#000000",
     justifyContent: "flex-end",
+    
   },
   searchBar: {
     height: 40,
@@ -317,14 +318,14 @@ const styles = StyleSheet.create({
   item: { color: "#fff", fontSize: 20, textAlign: "right" },
   prevValue: {
     color: "#fff",
-    fontSize: 32,
+    fontSize: 50,
     textAlign: "right",
     marginRight: 20,
     marginBottom: 10,
   },
   value: {
     color: "#fff",
-    fontSize: 40,
+    fontSize: 90,
     textAlign: "right",
     marginRight: 20,
     marginBottom: 10,
