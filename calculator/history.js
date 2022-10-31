@@ -23,7 +23,7 @@ export const History = (props) => {
         {item.text} = {item.result}
       </Text>
       <TouchableOpacity onPress={() => props.handleDelete(item.id)}>
-        <FontAwesomeIcon name="trash" size={32} color="red" />
+        <FontAwesomeIcon name="trash" size={32} color="#93FFD8" />
       </TouchableOpacity>
     </View>
   );
@@ -46,14 +46,14 @@ export const History = (props) => {
       />
 
       <SafeAreaView style={styles.container}>
-        <View>
+   
           <FlatList
             showsHorizontalScrollIndicator={false}
             data={props.data}
             renderItem={renderItem}
             keyExtractor={(item, index) => index}
           />
-        </View>
+     
       </SafeAreaView>
 
       <Button
@@ -78,16 +78,18 @@ const styles = StyleSheet.create({
     padding: 15,
     marginVertical: 8,
     marginHorizontal: 8,
-    backgroundColor: "#2FA4FF",
-    borderRadius: 16,
+    //backgroundColor: "#2FA4FF",
+   
     overflow: "hidden",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    borderBottomWidth:2,
+    borderBottomColor:"#93FFD8",
   },
   title: {
     fontSize: 32,
-    color: "#E8FFC2",
+    color: "#93FFD8",
     // textAlign: "right",
   },
   searchBar: {

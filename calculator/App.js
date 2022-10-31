@@ -174,6 +174,20 @@ const App = () => {
   }, []);
 
   useEffect(() => {
+    const fetchLocalStorage = async () => {
+      try {
+        const value = await AsyncStorage.getItem("light");
+        if (value !== null) {
+          setLight((value == light.toString()))
+        }
+      } catch (error) {
+        // Error retrieving data
+      }
+    };
+    fetchLocalStorage();
+  }, []);
+
+  useEffect(() => {
     searchFilter(text);
   }, [text]);
 
@@ -182,6 +196,11 @@ const App = () => {
 
     setFilteredData(history);
   }, [history]);
+
+  useEffect(() => {
+    
+    AsyncStorage.setItem("light", JSON.stringify(light));
+  }, [light]);
 
   const renderItem = ({ item }) => {
     return (
@@ -202,17 +221,18 @@ const App = () => {
   return (
     <View style={[styles.container, light ? { backgroundColor: "white" } : {}]}>
       <StatusBar barStyle="light-content" />
-      <SafeAreaView>
+      <View></View>
+       <SafeAreaView>
         {text.length ? (
           <SafeAreaView style={styles.historyField}>
-            <FlatList
+         <FlatList
               inverted
               showsHorizontalScrollIndicator={false}
               data={filteredData}
               renderItem={renderItem}
               keyExtractor={(item, index) => index}
             />
-          </SafeAreaView>
+          </SafeAreaView> 
         ) : (
           <View style={{ alignItems: "center", marginBottom: 40 }}>
             <Text
@@ -419,9 +439,7 @@ const styles = StyleSheet.create({
   },
   value: {
     color: "#fff",
-
-    fontSize: 40,
-
+    fontSize:40,
     textAlign: "right",
     marginRight: 20,
     marginBottom: 10,
