@@ -419,11 +419,9 @@ const styles = StyleSheet.create({
   },
   value: {
     color: "#fff",
-<<<<<<< HEAD
-    fontSize: 90,
-=======
-    fontSize: 45,
->>>>>>> c0c313151bb5772f38ca46b0b180eb0061b2d548
+
+    fontSize: 40,
+
     textAlign: "right",
     marginRight: 20,
     marginBottom: 10,
